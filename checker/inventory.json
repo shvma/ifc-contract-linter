@@ -1,0 +1,14 @@
+{
+  "comment": "Какие инструменты меняют круг тех, кто видит данные. Список ведётся отдельно от контракта: линтер не верит описанию эффекта в самом контракте. Причины — по схеме коннектора (results/connector-tools-list-2026-10-29.json) и справке Google (SOURCES.md).",
+  "widens_readers": {
+    "mcp/claude_ai_Google_Drive/create_file": "файл в папке parentId получает доступ папки (Google: «all files and subfolders inside it inherit those same sharing permissions»)",
+    "mcp/claude_ai_Google_Drive/copy_file": "копия в папке parentId получает доступ папки; без parentId — в папке оригинала; содержимое не проходит через контекст агента",
+    "mcp/claude_ai_Google_Drive/update_file": "parentId переносит файл («resulting in a folder move») — он получает доступ новой папки; writersCanShare и inheritedPermissionsDisabled меняют, кто может видеть и расшаривать",
+    "mcp/claude_ai_Google_Drive/share_file": "явная выдача доступа"
+  },
+  "exempt": {
+    "mcp/claude_ai_Google_Drive/trash_file": "корзина не расширяет круг читателей; авторы контракта: «a trashed file can be restored»",
+    "mcp/linear/get_diff": "чтение из Linear; requires проверяет только аудиторию входа, ничего не пишет (правило батареи linear v0.37.0, источник trusted+internal данных в моделях replay/)"
+  },
+  "source": "SOURCES.md (2026-10-19), схема коннектора (2026-10-29)"
+}
