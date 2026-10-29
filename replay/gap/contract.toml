@@ -1,0 +1,95 @@
+# Правила Drive из поставляемого контракта google-workspace v0.34.0 (= v0.37.0, тот же sha256)
+# дословно, все 11 инструментов, и тот же источник аудитории. Отличия от развёртывания:
+# - команда источника — заглушка ../audience-stub.py с выдуманными участниками
+#   (настоящему нужен OAuth-токен Google);
+# - корневой [policy.audience], как в примере docs/contracts.md;
+# - правило mcp/linear/get_diff из батареи linear — источник trusted+internal данных;
+# - [externals] timeout_ms/max_body_bytes;
+# - нет [[policy.authority]], поэтому «нужно ревью» здесь — отказ, а в развёртывании
+#   (плагин Claude Code даёт authority с attention = ["*"]) — вопрос человеку.
+# Совпадение правил Drive с results/google-workspace-appa-v0.34.0.toml и правила
+# get_diff с results/linear-appa-v0.37.0.toml проверяет checker/test_check.py.
+# Записи требуют trusted+internal и РЕВЬЮ НЕ ТРЕБУЮТ; ревью только у share_file.
+[policy]
+version = 2
+
+# Корневой конфиг развёртывания: self и internal из источника google-workspace
+# (docs/contracts.md, пример [policy.audience]).
+[policy.audience]
+self = ["google-workspace:viewer"]
+internal = ["google-workspace:full-members"]
+
+# Тот же источник и шаблоны, что в батарее; команда — заглушка без сети и токена.
+[externals.audience.google-workspace]
+command = ["python3", "../audience-stub.py"]
+token_env = "APPA_PROVIDER_GOOGLE_WORKSPACE_TOKEN"
+selectors = [
+  { template = "viewer", feeds = "self" },
+  { template = "full-members", feeds = "internal" },
+  { template = "group/<group-address>" },
+]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/read_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/download_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/get_file_metadata"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/get_file_permissions"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/search_files"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/list_recent_files"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/create_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/copy_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/trash_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/share_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["public"] }, attention = ["google-workspace-review"] }
+effects = ["google-workspace.sensitive"]
+
+# Источник доверенных данных `internal`: правило батареи linear дословно
+# (results/linear-appa-v0.37.0.toml, тег v0.37.0; тот же пример, что в issue #747).
+[[policy.tool]]
+name = "mcp/linear/get_diff"
+delta = { audience = ["internal"] }
+requires = { audience = { contains = ["internal"] } }
+
+[externals]
+timeout_ms = 2000
+max_body_bytes = 65536

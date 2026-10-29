@@ -1,0 +1,122 @@
+# Черновик исправления, вариант «б» (см. WRITEUP.md), на настоящих аргументах
+# коннектора (results/connector-tools-list-2026-10-29.json).
+#
+# Запись в папку из белого списка (FOLDER_INTERNAL_REPORTS — заглушка вместо настоящего
+# id папки, у которой нет доступа вне организации) проходит без ревью. Любая другая
+# запись требует ревью. Authority для метки в этой модели не задан, поэтому такая
+# запись отклоняется (fail-closed); в развёртывании корневой конфиг даёт authority,
+# и запись уходит человеку на подтверждение.
+#
+# Правила проверяются по порядку, побеждает первое подходящее (docs/contracts.md,
+# «Pattern matching»). Селектор сравнивает только строковые аргументы целиком;
+# нет аргумента — селектор не срабатывает.
+#
+# Цена варианта (трассы cost-rename-review, copy-no-parent-review и проба ../probes/bool-selector):
+# - create_file без parentId (корень My Drive) уходит на ревью: отсутствие аргумента
+#   селектором не выразить;
+# - copy_file без parentId кладёт копию в папку оригинала, чей доступ неизвестен — ревью;
+# - update_file без parentId тоже на ревью: булевы writersCanShare и
+#   inheritedPermissionsDisabled селектор не различает, поэтому переименование и
+#   звёздочка требуют ревью вместе с ними;
+# - белый список устаревает, если папку расшарят позже (Review, второй проход).
+[policy]
+version = 2
+
+# Корневой конфиг развёртывания: self и internal из источника google-workspace
+# (docs/contracts.md, пример [policy.audience]).
+[policy.audience]
+self = ["google-workspace:viewer"]
+internal = ["google-workspace:full-members"]
+
+# Тот же источник и шаблоны, что в батарее; команда — заглушка без сети и токена.
+[externals.audience.google-workspace]
+command = ["python3", "../audience-stub.py"]
+token_env = "APPA_PROVIDER_GOOGLE_WORKSPACE_TOKEN"
+selectors = [
+  { template = "viewer", feeds = "self" },
+  { template = "full-members", feeds = "internal" },
+  { template = "group/<group-address>" },
+]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/read_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/download_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/get_file_metadata"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/get_file_permissions"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/search_files"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/list_recent_files"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/create_file(parentId:FOLDER_INTERNAL_REPORTS)"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/create_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] }, attention = ["google-workspace-review"] }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/copy_file(parentId:FOLDER_INTERNAL_REPORTS)"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/copy_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] }, attention = ["google-workspace-review"] }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file(parentId:FOLDER_INTERNAL_REPORTS)"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] }, attention = ["google-workspace-review"] }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/trash_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/share_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["public"] }, attention = ["google-workspace-review"] }
+effects = ["google-workspace.sensitive"]
+
+# Источник доверенных данных `internal`: правило батареи linear дословно
+# (results/linear-appa-v0.37.0.toml, тег v0.37.0; тот же пример, что в issue #747).
+[[policy.tool]]
+name = "mcp/linear/get_diff"
+delta = { audience = ["internal"] }
+requires = { audience = { contains = ["internal"] } }
+
+[externals]
+timeout_ms = 2000
+max_body_bytes = 65536

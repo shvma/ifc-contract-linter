@@ -1,0 +1,12 @@
+# НЕГАТИВНЫЙ КОНТРОЛЬ: те же внутренние данные в папку из белого списка проходят без ревью.
+mcp/linear/get_diff {
+  id: "LIN-123"
+}
+expect allow
+
+mcp/claude_ai_Google_Drive/create_file {
+  title: "diff-summary"
+  textContent: "internal diff"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+}
+expect allow

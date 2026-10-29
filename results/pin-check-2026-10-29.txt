@@ -1,0 +1,10 @@
+date: 2026-10-29T12:13:27Z
+repo: archestra-ai/openappa, file: marketplace/batteries/google-workspace/appa.toml
+v0.34.0  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117  README.md 34a1482d866fe3c42bc1143e83cb631a83393d3294e213956849c0f4c45e6cc7
+v0.37.0  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117  README.md 34a1482d866fe3c42bc1143e83cb631a83393d3294e213956849c0f4c45e6cc7
+fe497073c1eb0ad8add924d20d5ea8782f21a3dc  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117  README.md 34a1482d866fe3c42bc1143e83cb631a83393d3294e213956849c0f4c45e6cc7
+(fe49707 = main на момент проверки, коммит 2026-10-29T00:21:08Z)
+последний коммит в marketplace/batteries/google-workspace: 2b0358c 2026-10-19T12:13:04Z
+релизы после v0.34.0: v0.37.0, v0.36.0, v0.35.1, v0.35.0
+SECURITY.md в репозитории: нет
+issue #747 (автор shvma): OPEN, комментариев: 0, создан 2026-10-28T14:27:32Z

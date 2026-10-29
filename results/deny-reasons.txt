@@ -1,0 +1,28 @@
+# gap
+replay/gap/control-read-then-write.appa:9: mcp/claude_ai_Google_Drive/create_file: got deny, want allow
+      - trust is suspicious, below the required floor trusted
+      - the readers do not include 1 required recipient(s)
+replay/gap/control-share-reviewed.appa:3: mcp/claude_ai_Google_Drive/share_file: got deny, want allow
+      - requires attention: google-workspace-review
+# fixed
+replay/fixed/control-read-then-write.appa:7: mcp/claude_ai_Google_Drive/create_file: got deny, want allow
+      - trust is suspicious, below the required floor trusted
+      - the readers do not include 1 required recipient(s)
+replay/fixed/copy-no-parent-review.appa:3: mcp/claude_ai_Google_Drive/copy_file: got deny, want allow
+      - requires attention: google-workspace-review
+replay/fixed/cost-rename-review.appa:3: mcp/claude_ai_Google_Drive/update_file: got deny, want allow
+      - requires attention: google-workspace-review
+replay/fixed/shared-copy-blocked.appa:4: mcp/claude_ai_Google_Drive/copy_file: got deny, want allow
+      - requires attention: google-workspace-review
+replay/fixed/shared-create-blocked.appa:7: mcp/claude_ai_Google_Drive/create_file: got deny, want allow
+      - requires attention: google-workspace-review
+replay/fixed/shared-move-blocked.appa:4: mcp/claude_ai_Google_Drive/update_file: got deny, want allow
+      - requires attention: google-workspace-review
+replay/fixed/writers-can-share-review.appa:3: mcp/claude_ai_Google_Drive/update_file: got deny, want allow
+      - requires attention: google-workspace-review
+# probes/bool-selector
+replay/probes/bool-selector/string-matched.appa:2: mcp/claude_ai_Google_Drive/update_file: got deny, want allow
+      - requires attention: google-workspace-review
+# probes/no-audience-source
+replay/probes/no-audience-source/read-then-write.appa:7: mcp/claude_ai_Google_Drive/create_file: got deny, want allow
+    [appa] mcp/claude_ai_Google_Drive/create_file: the policy configures no membership sources for the built-in audience internal ([policy.audience] internal), so a check that needs its members cannot be established; the call is denied

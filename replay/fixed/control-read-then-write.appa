@@ -1,0 +1,11 @@
+# КОНТРОЛЬ: исправление не сломало защиту от инъекции — даже запись в белый список после чтения отклоняется.
+mcp/claude_ai_Google_Drive/read_file_content {
+  fileId: "FILE_FROM_SOMEBODY"
+}
+expect allow
+
+mcp/claude_ai_Google_Drive/create_file {
+  title: "note"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+}
+expect deny

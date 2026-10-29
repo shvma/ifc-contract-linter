@@ -1,0 +1,12 @@
+# ИСПРАВЛЕНО: тот же create_file, что в gap/leak-create.appa, теперь требует ревью.
+mcp/linear/get_diff {
+  id: "LIN-123"
+}
+expect allow
+
+mcp/claude_ai_Google_Drive/create_file {
+  title: "diff-summary"
+  textContent: "internal diff"
+  parentId: "FOLDER_SHARED_ANYONE_WITH_LINK"
+}
+expect deny

@@ -1,0 +1,6 @@
+# Контроль пробы: строковый селектор (title:secret) срабатывает — ревью, отказ.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  title: "secret"
+}
+expect deny

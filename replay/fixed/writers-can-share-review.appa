@@ -1,0 +1,7 @@
+# ИСПРАВЛЕНО: writersCanShare — булев аргумент, селектор его не различает
+# (проверено опытом, см. LEARN.md). Ловится только тем, что update_file без parentId требует ревью.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  writersCanShare: true
+}
+expect deny

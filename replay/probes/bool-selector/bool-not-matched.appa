@@ -1,0 +1,8 @@
+# writersCanShare: true — булево. Селектор (writersCanShare:true) НЕ срабатывает,
+# вызов уходит в общее правило без ревью и проходит.
+# docs/contracts.md: «If an argument is missing, is an empty array, or is any other value, the selector does not match».
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  writersCanShare: true
+}
+expect allow

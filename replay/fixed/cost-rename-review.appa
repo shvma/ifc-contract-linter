@@ -1,0 +1,7 @@
+# ЦЕНА ВАРИАНТА: простое переименование тоже уходит на ревью — по той же причине,
+# что writersCanShare. Это сознательная плата за fail-closed.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  title: "diff-summary-v2"
+}
+expect deny

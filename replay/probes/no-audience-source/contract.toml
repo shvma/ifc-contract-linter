@@ -1,0 +1,19 @@
+# ПРОБА-АРТЕФАКТ: модель без [policy.audience] и источника аудитории — так стенд был
+# устроен до 2026-10-29. Контроль «чтение → запись» и здесь даёт deny, но причина —
+# «нет источника участников internal», а не trust. Исход совпадает, причина нет;
+# поэтому модели в gap/ и fixed/ подключают заглушку источника.
+[policy]
+version = 2
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/read_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/create_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+
+[externals]
+timeout_ms = 2000
+max_body_bytes = 65536

@@ -1,0 +1,8 @@
+{
+  "comment": "Правила записи, которым разрешено идти без ревью в исправленной модели (вариант «б»). FOLDER_INTERNAL_REPORTS — заглушка вместо id папки без доступа вне организации. В развёртывании этот список — решение допуска: у каждой записи владелец и срок пересмотра. Линтер: check_contract.py inventory.json --allow этот_файл contract.toml",
+  "allowed_without_review": {
+    "mcp/claude_ai_Google_Drive/create_file(parentId:FOLDER_INTERNAL_REPORTS)": "папка без доступа вне организации (заглушка модели)",
+    "mcp/claude_ai_Google_Drive/copy_file(parentId:FOLDER_INTERNAL_REPORTS)": "папка без доступа вне организации (заглушка модели)",
+    "mcp/claude_ai_Google_Drive/update_file(parentId:FOLDER_INTERNAL_REPORTS)": "папка без доступа вне организации (заглушка модели)"
+  }
+}

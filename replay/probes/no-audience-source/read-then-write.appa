@@ -1,0 +1,11 @@
+# Тот же контроль, что gap/control-read-then-write.appa, на модели без источника аудитории.
+mcp/claude_ai_Google_Drive/read_file_content {
+  fileId: "FILE_FROM_SOMEBODY"
+}
+expect allow
+
+mcp/claude_ai_Google_Drive/create_file {
+  title: "note"
+  parentId: "FOLDER_SHARED_ANYONE_WITH_LINK"
+}
+expect deny

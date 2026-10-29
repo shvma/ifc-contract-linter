@@ -1,0 +1,52 @@
+# gap (правила поставляемого контракта):
+ok    replay/gap/control-read-then-write.appa:4 mcp/claude_ai_Google_Drive/read_file_content allow (after accepting the narrowing)
+ok    replay/gap/control-read-then-write.appa:9 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/gap/control-read-then-write.appa
+ok    replay/gap/control-share-reviewed.appa:3 mcp/claude_ai_Google_Drive/share_file deny
+ok    replay/gap/control-share-reviewed.appa
+ok    replay/gap/leak-copy.appa:5 mcp/claude_ai_Google_Drive/copy_file allow
+ok    replay/gap/leak-copy.appa
+ok    replay/gap/leak-create.appa:5 mcp/linear/get_diff allow (after accepting the narrowing)
+ok    replay/gap/leak-create.appa:10 mcp/claude_ai_Google_Drive/create_file allow
+ok    replay/gap/leak-create.appa
+ok    replay/gap/leak-move.appa:6 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/gap/leak-move.appa
+ok    replay/gap/writers-can-share.appa:4 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/gap/writers-can-share.appa
+6 files: 6 ok, 0 failed, 0 could not run
+# fixed (черновик исправления, вариант «б»):
+ok    replay/fixed/control-read-then-write.appa:2 mcp/claude_ai_Google_Drive/read_file_content allow (after accepting the narrowing)
+ok    replay/fixed/control-read-then-write.appa:7 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/fixed/control-read-then-write.appa
+ok    replay/fixed/copy-no-parent-review.appa:3 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/fixed/copy-no-parent-review.appa
+ok    replay/fixed/cost-rename-review.appa:3 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/cost-rename-review.appa
+ok    replay/fixed/internal-copy-ok.appa:2 mcp/claude_ai_Google_Drive/copy_file allow
+ok    replay/fixed/internal-copy-ok.appa
+ok    replay/fixed/internal-create-ok.appa:2 mcp/linear/get_diff allow (after accepting the narrowing)
+ok    replay/fixed/internal-create-ok.appa:7 mcp/claude_ai_Google_Drive/create_file allow
+ok    replay/fixed/internal-create-ok.appa
+ok    replay/fixed/internal-move-ok.appa:4 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/fixed/internal-move-ok.appa
+ok    replay/fixed/shared-copy-blocked.appa:4 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/fixed/shared-copy-blocked.appa
+ok    replay/fixed/shared-create-blocked.appa:2 mcp/linear/get_diff allow (after accepting the narrowing)
+ok    replay/fixed/shared-create-blocked.appa:7 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/fixed/shared-create-blocked.appa
+ok    replay/fixed/shared-move-blocked.appa:4 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/shared-move-blocked.appa
+ok    replay/fixed/writers-can-share-review.appa:3 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/writers-can-share-review.appa
+10 files: 10 ok, 0 failed, 0 could not run
+# проба: bool-selector
+ok    replay/probes/bool-selector/bool-not-matched.appa:4 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/probes/bool-selector/bool-not-matched.appa
+ok    replay/probes/bool-selector/string-matched.appa:2 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/probes/bool-selector/string-matched.appa
+2 files: 2 ok, 0 failed, 0 could not run
+# проба: no-audience-source
+ok    replay/probes/no-audience-source/read-then-write.appa:2 mcp/claude_ai_Google_Drive/read_file_content allow (after accepting the narrowing)
+ok    replay/probes/no-audience-source/read-then-write.appa:7 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/probes/no-audience-source/read-then-write.appa
+1 file: 1 ok, 0 failed, 0 could not run

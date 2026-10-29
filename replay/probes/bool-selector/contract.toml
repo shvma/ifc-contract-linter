@@ -1,0 +1,24 @@
+# ПРОБА: видит ли селектор аргумент не-строку. Первое правило — с ревью, общее — без.
+# Если селектор сработал, вызов отклоняется (ревью без authority); если нет — проходит.
+# Для сравнения строковый селектор по title на той же схеме.
+[policy]
+version = 2
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file(writersCanShare:true)"
+delta = {}
+requires = { trust = "trusted", attention = ["google-workspace-review"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file(title:secret)"
+delta = {}
+requires = { trust = "trusted", attention = ["google-workspace-review"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file"
+delta = {}
+requires = { trust = "trusted" }
+
+[externals]
+timeout_ms = 2000
+max_body_bytes = 65536

@@ -1,0 +1,6 @@
+# ИСПРАВЛЕНО: copy_file без parentId кладёт копию в папку оригинала, чей доступ политике
+# неизвестен. Селектор на отсутствующий аргумент не срабатывает — общее правило, ревью.
+mcp/claude_ai_Google_Drive/copy_file {
+  fileId: "FILE_INTERNAL_DIFF"
+}
+expect deny
