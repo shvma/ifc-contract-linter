@@ -1,5 +1,5 @@
 {
-  "_source": "Схемы инструментов коннектора Google Drive claude.ai, как их отдаёт клиенту MCP-сервер (аналог tools/list). Сняты агентом 2026-10-29 из сессии Claude Code, где коннектор подключён под id f27ea65d-23de-4e94-9fc6-f9eb29fa4d33; ни один инструмент не вызывался, в Drive ничего не читалось и не менялось. Набор и имена 11 инструментов совпадают с батареей OpenAPPA google-workspace (`mcp/claude_ai_Google_Drive/<имя>`). Описания и inputSchema переписаны дословно; служебное поле x-google-enum-descriptions опущено.",
+  "_source": "Схемы инструментов коннектора Google Drive claude.ai, как их отдаёт клиенту MCP-сервер (аналог tools/list), сняты 2026-10-29. Ни один инструмент не вызывался, в Drive ничего не читалось и не менялось. Набор и имена 11 инструментов совпадают с батареей OpenAPPA google-workspace (`mcp/claude_ai_Google_Drive/<имя>`). Описания и inputSchema переписаны дословно; служебное поле x-google-enum-descriptions опущено.",
   "_fetched": "2026-10-29",
   "tools": [
     {

@@ -15,6 +15,7 @@
 
 Нужен tomllib (Python 3.11+) или пакет tomli.
 """
+import argparse
 import json
 import sys
 
@@ -32,29 +33,55 @@ def base_name(name):
 
 
 def findings(contract, inventory, allowed=None):
+    if not isinstance(contract, dict) or not isinstance(contract.get("policy"), dict):
+        raise ValueError("contract must contain a policy table")
+    policy = contract["policy"]
+    if type(policy.get("version")) is not int or policy["version"] != 2:
+        raise ValueError("unsupported or missing policy version")
+    tools = policy.get("tool")
+    if not isinstance(tools, list) or not tools:
+        raise ValueError("policy.tool must be a nonempty array")
+    if not isinstance(inventory, dict) or not all(isinstance(inventory.get(k), dict)
+                                                for k in ("widens_readers", "exempt", "read_only")):
+        raise ValueError("inventory must classify writes, exemptions and reads")
     widens, exempt, allowed = inventory["widens_readers"], inventory["exempt"], allowed or {}
+    if not isinstance(allowed, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip()
+                                            for k, v in allowed.items()):
+        raise ValueError("allowlist entries require exact names and nonempty justifications")
     out = []
-    for tool in contract.get("policy", {}).get("tool", []):
-        name, requires = tool.get("name", "<безымянный>"), tool.get("requires")
+    seen = set()
+    for tool in tools:
+        if not isinstance(tool, dict) or not isinstance(tool.get("name"), str) or not tool["name"]:
+            raise ValueError("each policy tool needs a nonempty name")
+        name, requires = tool["name"], tool.get("requires")
+        if name in seen:
+            raise ValueError("duplicate tool rule: " + name)
+        seen.add(name)
+        if requires is not None and not isinstance(requires, dict):
+            raise ValueError("requires must be a table: " + name)
+        attention = (requires or {}).get("attention", [])
+        if not isinstance(attention, list) or any(not isinstance(a, str) for a in attention):
+            raise ValueError("attention must be an array of strings: " + name)
         base = base_name(name)
         if base in widens:
-            if not (requires or {}).get("attention") and name not in allowed:
+            if not set(attention).intersection(inventory.get("review_gates", ["review"])) and name not in allowed:
                 out.append({"tool": name, "gap": "write_without_review", "why": widens[base]})
-        elif requires is not None and base not in exempt:
-            out.append({"tool": name, "gap": "unclassified_write",
-                        "why": "пишет, но не классифицирован в inventory.json"})
+        elif base not in exempt and base not in inventory["read_only"]:
+            out.append({"tool": name, "gap": "unclassified_write" if requires is not None else "unclassified_tool",
+                        "why": "инструмент не классифицирован в inventory.json"})
     return out
 
 
-def main(inv_path, paths):
+def main(inv_path, paths, allow_path=None):
     if tomllib is None:
         print("нет парсера TOML: нужен Python 3.11+ или пакет tomli", file=sys.stderr)
         return 2
-    inventory = json.load(open(inv_path, encoding="utf-8"))
+    with open(inv_path, encoding="utf-8") as source:
+        inventory = json.load(source)
     allowed = {}
-    if paths[:1] == ["--allow"]:
-        allowed = json.load(open(paths[1], encoding="utf-8"))["allowed_without_review"]
-        paths = paths[2:]
+    if allow_path:
+        with open(allow_path, encoding="utf-8") as source:
+            allowed = json.load(source)["allowed_without_review"]
     code = 0
     for p in paths:
         with open(p, "rb") as f:
@@ -67,4 +94,14 @@ def main(inv_path, paths):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1], sys.argv[2:]))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("inventory")
+    parser.add_argument("--allow")
+    parser.add_argument("contracts", nargs="+")
+    args = parser.parse_args()
+    try:
+        code = main(args.inventory, args.contracts, args.allow)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        print("invalid input: " + str(exc), file=sys.stderr)
+        code = 2
+    sys.exit(code)

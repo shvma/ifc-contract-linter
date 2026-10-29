@@ -34,6 +34,24 @@ class SyntheticTest(unittest.TestCase):
         c = contract(tool("copy_file", {"trust": "trusted", "attention": []}))
         self.assertEqual(len(check_contract.findings(c, INV)), 1)
 
+    def test_other_attention_is_not_review(self):
+        c = contract(tool("copy_file", {"attention": ["audit"]}))
+        self.assertEqual(len(check_contract.findings(c, INV)), 1)
+
+    def test_unknown_tool_without_requires_is_not_clean(self):
+        self.assertEqual(check_contract.findings(contract(tool("unknown_writer")), INV)[0]["gap"], "unclassified_tool")
+
+    def test_invalid_or_empty_contract_is_not_clean(self):
+        for value in ({}, {"policy": {}}, contract(), {"policy": {"version": 99, "tool": [tool("create_file")]}}):
+            with self.assertRaises(ValueError):
+                check_contract.findings(value, INV)
+
+    def test_invalid_attention_and_duplicate_rule_are_errors(self):
+        for value in (contract(tool("create_file", {"attention": "review"})),
+                      contract(tool("create_file"), tool("create_file"))):
+            with self.assertRaises(ValueError):
+                check_contract.findings(value, INV)
+
     def test_understated_effects_still_flagged(self):
         # Контракт без effects у записи: линтер опирается на inventory, а не на effects.
         c = contract(tool("update_file", {"trust": "trusted"}))

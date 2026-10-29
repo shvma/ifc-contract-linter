@@ -10,5 +10,17 @@
     "mcp/claude_ai_Google_Drive/trash_file": "корзина не расширяет круг читателей; авторы контракта: «a trashed file can be restored»",
     "mcp/linear/get_diff": "чтение из Linear; requires проверяет только аудиторию входа, ничего не пишет (правило батареи linear v0.37.0, источник trusted+internal данных в моделях replay/)"
   },
-  "source": "SOURCES.md (2026-10-19), схема коннектора (2026-10-29)"
+  "source": "SOURCES.md (2026-10-19), схема коннектора (2026-10-29)",
+  "read_only": {
+    "mcp/claude_ai_Google_Drive/read_file_content": "Read-only operation in the pinned connector tools/list snapshot",
+    "mcp/claude_ai_Google_Drive/download_file_content": "Read-only operation in the pinned connector tools/list snapshot",
+    "mcp/claude_ai_Google_Drive/get_file_metadata": "Read-only operation in the pinned connector tools/list snapshot",
+    "mcp/claude_ai_Google_Drive/get_file_permissions": "Read-only operation in the pinned connector tools/list snapshot",
+    "mcp/claude_ai_Google_Drive/search_files": "Read-only operation in the pinned connector tools/list snapshot",
+    "mcp/claude_ai_Google_Drive/list_recent_files": "Read-only operation in the pinned connector tools/list snapshot"
+  },
+  "review_gates": [
+    "review",
+    "google-workspace-review"
+  ]
 }

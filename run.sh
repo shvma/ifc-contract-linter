@@ -11,7 +11,11 @@ GOT=$(shasum -a 256 results/google-workspace-appa-v0.34.0.toml | cut -d' ' -f1)
 echo "sha256 снимка: $GOT (закреплён)"
 (cd checker && python3 -m unittest -v test_check)
 echo "--- поставляемый контракт v0.34.0 ---"
-python3 checker/check_contract.py checker/inventory.json results/google-workspace-appa-v0.34.0.toml || true
+set +e
+python3 checker/check_contract.py checker/inventory.json results/google-workspace-appa-v0.34.0.toml | tee results/linter-run.txt
+SHIPPED_STATUS=${PIPESTATUS[0]}
+set -e
+[ "$SHIPPED_STATUS" -eq 1 ] || { echo "expected shipped-contract findings, got status $SHIPPED_STATUS" >&2; exit 1; }
 echo "--- исправленная модель (черновик варианта «б») ---"
 python3 checker/check_contract.py checker/inventory.json --allow replay/fixed/allowlist.json replay/fixed/contract.toml
 
@@ -44,5 +48,6 @@ if [ -x "$APPA" ]; then
     done
   } | tee results/deny-reasons.txt
 else
-  echo "--- appa не установлен, replay пропущен (см. replay/README.md) ---"
+  echo "appa is required for the complete verification; replay was not run" >&2
+  exit 2
 fi

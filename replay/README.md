@@ -34,8 +34,9 @@
 |---|---|---|---|
 | `get_diff` из Linear → `create_file` в общую папку | allow (`leak-create`) | deny, ревью (`shared-create-blocked`) | основной зазор: доверенные внутренние данные уходят в открытую папку |
 | `copy_file` в общую папку | allow (`leak-copy`) | deny, ревью (`shared-copy-blocked`) | копия без прохода через контекст агента |
-| `update_file` с `parentId` = **перенос** в общую папку | allow (`leak-move`) | deny, ревью (`shared-move-blocked`) | сценарий карточки: перенос есть, он спрятан в `update_file` |
-| `update_file` с `writersCanShare: true` | allow (`writers-can-share`) | deny, ревью (`writers-can-share-review`) | смежный: меняет, кто может расшаривать |
+| `update_file` с `parentId` = **перенос** в общую папку | allow (`leak-move`) | deny, ревью (`shared-move-blocked`) | исходный сценарий: перенос есть, он спрятан в `update_file` |
+| `update_file` с `writersCanShare: true` (без `parentId`) | allow (`writers-can-share`) | deny, ревью (`writers-can-share-review`) | смежный: меняет, кто может расшаривать |
+| `update_file` с `writersCanShare: true` **и** `parentId` из белого списка | allow | **allow** (`residual-writerscanshare-via-allowlist`) | **остаточный зазор «б»**: смена доступа внутри белого списка идёт без ревью |
 | `copy_file` без `parentId` | — | deny, ревью (`copy-no-parent-review`) | копия ляжет в папку оригинала, чей доступ неизвестен |
 | запись, копия, перенос во внутреннюю папку | — | allow (`internal-create-ok`, `internal-copy-ok`, `internal-move-ok`) | негативный контроль: обычная работа не сломана |
 | переименование `update_file` | — | deny, ревью (`cost-rename-review`) | **цена** варианта «б» |
@@ -51,6 +52,7 @@
 ## Ограничения формата, найденные опытом (appa 0.34.0)
 
 - Селектор сравнивает только строковые аргументы. `update_file(writersCanShare:true)` не срабатывает, а `update_file(title:secret)` срабатывает (проба `probes/bool-selector`). Так же написано в `docs/contracts.md`: «If an argument is missing, is an empty array, or is any other value, the selector does not match».
+- Это режет в обе стороны. Раз булев флаг селектором не выразить, разрешающее правило по строковому аргументу пропускает заодно и булев: `update_file(parentId:<белый список>)` идёт без ревью и совпадает первым, поэтому `writersCanShare:true` и `inheritedPermissionsDisabled:true` при переносе в папку из белого списка проходят без ревью (трасса `fixed/residual-writerscanshare-via-allowlist.appa`). Это остаточный зазор варианта «б», не закрываемый в формате.
 - Отсутствующий аргумент селектором не выразить. Поэтому `create_file` без `parentId` (корень My Drive) и любое `update_file` без `parentId` в варианте «б» попадают в общее правило с ревью.
 - Replay печатает причину отказа только на провале. Поэтому `../run.sh` переворачивает `expect deny` во временной копии и собирает причины.
 

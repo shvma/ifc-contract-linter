@@ -29,6 +29,8 @@ ok    replay/fixed/internal-create-ok.appa:7 mcp/claude_ai_Google_Drive/create_f
 ok    replay/fixed/internal-create-ok.appa
 ok    replay/fixed/internal-move-ok.appa:4 mcp/claude_ai_Google_Drive/update_file allow
 ok    replay/fixed/internal-move-ok.appa
+ok    replay/fixed/residual-writerscanshare-via-allowlist.appa:7 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/fixed/residual-writerscanshare-via-allowlist.appa
 ok    replay/fixed/shared-copy-blocked.appa:4 mcp/claude_ai_Google_Drive/copy_file deny
 ok    replay/fixed/shared-copy-blocked.appa
 ok    replay/fixed/shared-create-blocked.appa:2 mcp/linear/get_diff allow (after accepting the narrowing)
@@ -38,7 +40,7 @@ ok    replay/fixed/shared-move-blocked.appa:4 mcp/claude_ai_Google_Drive/update_
 ok    replay/fixed/shared-move-blocked.appa
 ok    replay/fixed/writers-can-share-review.appa:3 mcp/claude_ai_Google_Drive/update_file deny
 ok    replay/fixed/writers-can-share-review.appa
-10 files: 10 ok, 0 failed, 0 could not run
+11 files: 11 ok, 0 failed, 0 could not run
 # проба: bool-selector
 ok    replay/probes/bool-selector/bool-not-matched.appa:4 mcp/claude_ai_Google_Drive/update_file allow
 ok    replay/probes/bool-selector/bool-not-matched.appa
