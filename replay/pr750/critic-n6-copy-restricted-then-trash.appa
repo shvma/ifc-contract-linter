@@ -1,0 +1,13 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ЗАКРЫТО forwards: копия файла узкой группы в папку организации; trash_file PR не меняет.
+mcp/claude_ai_Google_Drive/copy_file {
+  fileId: "FILE_FINANCE_ONLY"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  title: "finance"
+}
+expect deny
+
+mcp/claude_ai_Google_Drive/trash_file {
+  fileId: "FILE_FINANCE_ONLY"
+}
+expect allow

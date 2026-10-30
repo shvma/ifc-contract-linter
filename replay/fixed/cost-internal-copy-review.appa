@@ -1,0 +1,8 @@
+# ЦЕНА ВАРИАНТА: копия даже в папку из белого списка уходит на ревью. Разрешающего
+# правила copy_file(parentId:…) нет: читателей оригинала контракт не знает, и копия
+# файла с узким кругом читателей в папку организации расширила бы его (critic-restricted-copy.appa).
+mcp/claude_ai_Google_Drive/copy_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+}
+expect deny

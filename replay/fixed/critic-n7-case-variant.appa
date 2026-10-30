@@ -1,0 +1,7 @@
+# ПРОБА КРИТИКА (ревью 2026-10-30, n7), контроль fail-closed: id в другом регистре не
+# совпадает с селектором белого списка и попадает в общее правило с ревью.
+mcp/claude_ai_Google_Drive/create_file {
+  title: "x"
+  parentId: "folder_internal_reports"
+}
+expect deny

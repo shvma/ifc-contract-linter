@@ -1,4 +1,12 @@
+--- поставляемый контракт v0.34.0 (ждём пробелы) ---
 results/google-workspace-appa-v0.34.0.toml: 3 пробел(ов)
   - mcp/claude_ai_Google_Drive/create_file: write_without_review — файл в папке parentId получает доступ папки (Google: «all files and subfolders inside it inherit those same sharing permissions»)
   - mcp/claude_ai_Google_Drive/copy_file: write_without_review — копия в папке parentId получает доступ папки; без parentId — в папке оригинала; содержимое не проходит через контекст агента
-  - mcp/claude_ai_Google_Drive/update_file: write_without_review — parentId переносит файл («resulting in a folder move») — он получает доступ новой папки; writersCanShare и inheritedPermissionsDisabled меняют, кто может видеть и расшаривать
+  - mcp/claude_ai_Google_Drive/update_file: access_change_without_review — аргументы writersCanShare, inheritedPermissionsDisabled, downloadRestriction меняют доступ в том же вызове; селектор их не различает, поэтому правилу без ревью они проходят
+--- черновик исправления, вариант «б» (ждём чисто) ---
+replay/fixed/contract.toml: пробелов нет
+--- PR #750 @2a9397b (ждём: пробелов нет, аннотатор к проверке трассами) ---
+results/upstream-pr750-2a9397b/appa.toml: пробелов нет, 3 к проверке трассами
+  - mcp/claude_ai_Google_Drive/create_file: annotated_unchecked — решает аннотатор google-workspace.drive-readers; линтер его код не проверяет — нужны трассы
+  - mcp/claude_ai_Google_Drive/copy_file: annotated_unchecked — решает аннотатор google-workspace.drive-readers; линтер его код не проверяет — нужны трассы
+  - mcp/claude_ai_Google_Drive/update_file: annotated_unchecked — решает аннотатор google-workspace.drive-readers; линтер его код не проверяет — нужны трассы

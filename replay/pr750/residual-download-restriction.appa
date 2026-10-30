@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ОСТАТОК PR (и вне модели аудитории): снять downloadRestriction без переноса. Круг читателей
+# не меняется, снимается мера DLP (запрет скачивать, печатать, копировать). Метки аудитории
+# этого не выражают; в варианте «б» любой update_file идёт на ревью.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_FINANCE_ONLY"
+  downloadRestriction: {"restrictedForReaders": false, "restrictedForWriters": false}
+}
+expect allow

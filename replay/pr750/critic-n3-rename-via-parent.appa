@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# НЕ ЗАЗОР: переименование с переносом внутреннего файла во внутреннюю папку.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  title: "diff-summary-v2"
+  readOnly: false
+}
+expect allow

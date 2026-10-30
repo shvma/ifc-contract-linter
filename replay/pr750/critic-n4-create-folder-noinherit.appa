@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# НЕ ЗАЗОР: inheritedPermissionsDisabled: true сужает круг читателей.
+mcp/claude_ai_Google_Drive/create_file {
+  title: "drop"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  contentMimeType: "application/vnd.google-apps.folder"
+  inheritedPermissionsDisabled: true
+}
+expect allow

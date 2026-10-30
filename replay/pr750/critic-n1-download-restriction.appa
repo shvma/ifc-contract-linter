@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ЗАКРЫТО ПОПУТНО: отказ из-за переноса файла узкой группы в папку организации (forwards self),
+# а не из-за downloadRestriction. Без parentId флаг проходит: residual-download-restriction.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_FINANCE_ONLY"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  downloadRestriction: {"restrictedForReaders": false, "restrictedForWriters": false}
+}
+expect deny

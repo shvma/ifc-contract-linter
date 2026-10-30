@@ -1,0 +1,13 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# НЕГАТИВНЫЙ КОНТРОЛЬ: создание во внутренней папке без ревью.
+mcp/linear/get_diff {
+  id: "LIN-123"
+}
+expect allow
+
+mcp/claude_ai_Google_Drive/create_file {
+  title: "diff-summary"
+  textContent: "internal diff"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+}
+expect allow

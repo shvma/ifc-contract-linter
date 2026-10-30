@@ -1,0 +1,7 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# БЕЗ ЦЕНЫ: copy_file без parentId — аннотатор спрашивает папку оригинала (фикстура:
+# FOLDER_INTERNAL_REPORTS, internal) и пропускает. В варианте «б» это ревью.
+mcp/claude_ai_Google_Drive/copy_file {
+  fileId: "FILE_INTERNAL_DIFF"
+}
+expect allow

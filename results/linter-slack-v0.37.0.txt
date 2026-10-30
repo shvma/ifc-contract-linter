@@ -1,0 +1,5 @@
+results/slack-appa-v0.37.0.toml: 4 пробел(ов)
+  - mcp/claude_ai_Slack/slack_add_reaction: write_without_review — реакцию видят участники канала; батарея относит её к «writes nobody else reads yet» — здесь агент с батареей расходится (гипотеза, канал на несколько бит)
+  - mcp/claude_ai_Slack/slack_create_canvas: write_without_review — канвас читают те, с кем он расшарен; кто это, контракт не знает (гипотеза агента, схема не снята)
+  - mcp/claude_ai_Slack/slack_update_canvas: write_without_review — правку видят все, кто уже читает канвас, в том числе через канал Slack Connect (гипотеза агента, не проверена)
+  - mcp/claude_ai_Slack/slack_create_conversation: write_without_review — название и тему нового канала видят его участники, у публичного — все в рабочем пространстве (гипотеза агента)

@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ЗАКРЫТО ПОПУТНО: отказ из-за переноса (forwards self), а не из-за inheritedPermissionsDisabled.
+# Без parentId флаг проходит: residual-reinherit-no-parent.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FOLDER_FINANCE_RESTRICTED"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  inheritedPermissionsDisabled: false
+}
+expect deny

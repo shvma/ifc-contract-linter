@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ОСТАТОК PR: writersCanShare: true без переноса. Аннотатор смотрит только fileId и parentId:
+# читателей файл не получает, но любой редактор сможет его расшарить. Ревью share_file обходится
+# через редактора (публичный комментарий ученика к PR #750, 2026-10-29).
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  writersCanShare: true
+}
+expect allow

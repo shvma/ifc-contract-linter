@@ -3,7 +3,7 @@
   "widens_readers": {
     "mcp/claude_ai_Google_Drive/create_file": "файл в папке parentId получает доступ папки (Google: «all files and subfolders inside it inherit those same sharing permissions»)",
     "mcp/claude_ai_Google_Drive/copy_file": "копия в папке parentId получает доступ папки; без parentId — в папке оригинала; содержимое не проходит через контекст агента",
-    "mcp/claude_ai_Google_Drive/update_file": "parentId переносит файл («resulting in a folder move») — он получает доступ новой папки; writersCanShare и inheritedPermissionsDisabled меняют, кто может видеть и расшаривать",
+    "mcp/claude_ai_Google_Drive/update_file": "parentId переносит файл («resulting in a folder move») — он получает доступ новой папки; writersCanShare: true даёт редакторам расшаривать, inheritedPermissionsDisabled: false снова включает наследование доступа папки («false to re-enable inherited permissions»)",
     "mcp/claude_ai_Google_Drive/share_file": "явная выдача доступа"
   },
   "exempt": {
@@ -22,5 +22,34 @@
   "review_gates": [
     "review",
     "google-workspace-review"
-  ]
+  ],
+  "target_args": {
+    "mcp/claude_ai_Google_Drive/create_file": [
+      "parentId"
+    ],
+    "mcp/claude_ai_Google_Drive/copy_file": [
+      "parentId"
+    ],
+    "mcp/claude_ai_Google_Drive/update_file": [
+      "fileId",
+      "parentId"
+    ],
+    "mcp/claude_ai_Google_Drive/share_file": [
+      "fileId"
+    ]
+  },
+  "target_args_comment": "Аргументы, которые называют цель записи: аудитория из них (`@provider:folder/$parentId`) — мера для этой цели. Схема коннектора: results/connector-tools-list-2026-10-29.json.",
+  "sends_content": [
+    "mcp/claude_ai_Google_Drive/copy_file",
+    "mcp/claude_ai_Google_Drive/update_file"
+  ],
+  "sends_content_comment": "Инструменты, которые переносят содержимое Drive на стороне Google, мимо траектории: копия (copy_file) и перенос (update_file с parentId). Аудитории цели мало, нужен forwards — кто уже читает источник (docs/contracts.md v0.37.0, «Use forwards when the tool itself sends content that its arguments do not carry»).",
+  "access_args": {
+    "mcp/claude_ai_Google_Drive/update_file": [
+      "writersCanShare",
+      "inheritedPermissionsDisabled",
+      "downloadRestriction"
+    ]
+  },
+  "access_args_comment": "Аргументы, которые меняют доступ или меры DLP, не меняя цель: writersCanShare: true (редакторы могут расшаривать), inheritedPermissionsDisabled: false (снова наследовать доступ родителя), downloadRestriction (снять запрет скачивать и копировать). Селектор их не различает (булевы и объект), аудитория цели их не покрывает, поэтому правилу с такими аргументами нужно ревью; белый список папок его не заменяет. inheritedPermissionsDisabled у create_file сюда не входит: true сужает круг читателей."
 }

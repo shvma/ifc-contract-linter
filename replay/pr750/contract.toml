@@ -1,0 +1,103 @@
+# Правила Drive из PR archestra-ai/OpenAPPA#750 (голова 2a9397b, не слит) дословно:
+# аннотатор google-workspace.drive-readers на create_file, copy_file, update_file.
+# Снимок PR — ../../results/upstream-pr750-2a9397b/. Отличия от развёртывания те же,
+# что у ../gap/contract.toml, плюс одно:
+# - команда аннотатора — ../drive-readers-fixture.py: он исполняет настоящий
+#   drive-readers.py из снимка PR, но вместо Drive API и Admin SDK отвечает фикстурой
+#   (выдуманные папки и права, см. сам скрипт). Ответы аннотатора — это код PR на
+#   фикстуре, а не живой Workspace.
+# Совпадение правил Drive и объявления аннотатора с results/upstream-pr750-2a9397b/appa.toml
+# проверяет checker/test_check.py.
+[policy]
+version = 2
+
+# Корневой конфиг развёртывания: self и internal из источника google-workspace
+# (docs/contracts.md, пример [policy.audience]).
+[policy.audience]
+self = ["google-workspace:viewer"]
+internal = ["google-workspace:full-members"]
+
+# Тот же источник и шаблоны, что в батарее; команда — заглушка без сети и токена.
+[externals.audience.google-workspace]
+command = ["python3", "../audience-stub.py"]
+token_env = "APPA_PROVIDER_GOOGLE_WORKSPACE_TOKEN"
+selectors = [
+  { template = "viewer", feeds = "self" },
+  { template = "full-members", feeds = "internal" },
+  { template = "group/<group-address>" },
+]
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/read_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/download_file_content"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/get_file_metadata"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/get_file_permissions"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/search_files"
+delta = { trust = "suspicious", audience = ["self"] }
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/list_recent_files"
+delta = { trust = "suspicious", audience = ["self"] }
+
+# What a write into Drive needs: trusted data its target's readers may see.
+[[policy.annotator]]
+name = "google-workspace.drive-readers"
+ranks = ["trusted"]
+audiences = ["self", "internal"]
+marks = []
+effects = ["google-workspace.changed"]
+
+[externals.annotators."google-workspace.drive-readers"]
+command = ["python3", "-I", "../drive-readers-fixture.py"]
+token_env = "APPA_PROVIDER_GOOGLE_WORKSPACE_TOKEN"
+
+# --- writes: trusted data the target's readers may see ---
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/create_file"
+annotator = "google-workspace.drive-readers"
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/copy_file"
+annotator = "google-workspace.drive-readers"
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/update_file"
+annotator = "google-workspace.drive-readers"
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/trash_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["internal"] } }
+effects = ["google-workspace.changed"]
+
+# --- sharing: public input, reviewed ---
+
+[[policy.tool]]
+name = "mcp/claude_ai_Google_Drive/share_file"
+delta = {}
+requires = { trust = "trusted", audience = { contains = ["public"] }, attention = ["google-workspace-review"] }
+effects = ["google-workspace.sensitive"]
+
+# Источник доверенных данных `internal`: правило батареи linear дословно
+# (results/linear-appa-v0.37.0.toml, тег v0.37.0; тот же пример, что в issue #747).
+[[policy.tool]]
+name = "mcp/linear/get_diff"
+delta = { audience = ["internal"] }
+requires = { audience = { contains = ["internal"] } }
+
+[externals]
+timeout_ms = 2000
+max_body_bytes = 65536

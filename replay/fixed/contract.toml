@@ -1,24 +1,34 @@
 # Черновик исправления, вариант «б» (см. WRITEUP.md), на настоящих аргументах
 # коннектора (results/connector-tools-list-2026-10-29.json).
 #
-# Запись в папку из белого списка (FOLDER_INTERNAL_REPORTS — заглушка вместо настоящего
-# id папки, у которой нет доступа вне организации) проходит без ревью. Любая другая
-# запись требует ревью. Authority для метки в этой модели не задан, поэтому такая
-# запись отклоняется (fail-closed); в развёртывании корневой конфиг даёт authority,
-# и запись уходит человеку на подтверждение.
+# Без ревью идёт одно: create_file в папку из белого списка (FOLDER_INTERNAL_REPORTS —
+# заглушка вместо настоящего id папки, у которой нет доступа вне организации).
+# Создание пишет то, что уже лежит в траектории, а её метку монитор знает.
+# copy_file и update_file идут на ревью всегда, с любым parentId: они переносят
+# содержимое Drive на стороне Google, и его читателей контракт не знает
+# (README батареи: «A doc read through this battery is `self` data»).
+# Authority для метки в этой модели не задан, поэтому такая запись отклоняется
+# (fail-closed); в развёртывании корневой конфиг даёт authority, и запись уходит
+# человеку на подтверждение.
 #
 # Правила проверяются по порядку, побеждает первое подходящее (docs/contracts.md,
 # «Pattern matching»). Селектор сравнивает только строковые аргументы целиком;
 # нет аргумента — селектор не срабатывает.
 #
-# Цена варианта (трассы cost-rename-review, copy-no-parent-review и проба ../probes/bool-selector):
+# Почему у copy_file и update_file нет разрешающего правила по parentId
+# (пробы критика 2026-10-30, fixed/critic-*.appa): правило
+# update_file(parentId:<папка из списка>) совпадало первым и пропускало без ревью
+# всё, что едет в том же вызове, — writersCanShare, inheritedPermissionsDisabled:false,
+# снятие downloadRestriction, переименование, перенос в список папки, открытой по
+# ссылке. Правило copy_file(parentId:<папка из списка>) пропускало копию файла с узким
+# кругом читателей в папку всей организации.
+#
+# Цена (трассы cost-*.appa и проба ../probes/bool-selector):
+# - copy_file и update_file — всегда ревью, даже копия, перенос и переименование
+#   внутри белого списка;
 # - create_file без parentId (корень My Drive) уходит на ревью: отсутствие аргумента
 #   селектором не выразить;
-# - copy_file без parentId кладёт копию в папку оригинала, чей доступ неизвестен — ревью;
-# - update_file без parentId тоже на ревью: булевы writersCanShare и
-#   inheritedPermissionsDisabled селектор не различает, поэтому переименование и
-#   звёздочка требуют ревью вместе с ними;
-# - белый список устаревает, если папку расшарят позже (Review, второй проход).
+# - белый список устаревает, если папку расшарят позже: правило верит списку, а не Drive.
 [policy]
 version = 2
 
@@ -75,21 +85,9 @@ requires = { trust = "trusted", audience = { contains = ["internal"] }, attentio
 effects = ["google-workspace.changed"]
 
 [[policy.tool]]
-name = "mcp/claude_ai_Google_Drive/copy_file(parentId:FOLDER_INTERNAL_REPORTS)"
-delta = {}
-requires = { trust = "trusted", audience = { contains = ["internal"] } }
-effects = ["google-workspace.changed"]
-
-[[policy.tool]]
 name = "mcp/claude_ai_Google_Drive/copy_file"
 delta = {}
 requires = { trust = "trusted", audience = { contains = ["internal"] }, attention = ["google-workspace-review"] }
-effects = ["google-workspace.changed"]
-
-[[policy.tool]]
-name = "mcp/claude_ai_Google_Drive/update_file(parentId:FOLDER_INTERNAL_REPORTS)"
-delta = {}
-requires = { trust = "trusted", audience = { contains = ["internal"] } }
 effects = ["google-workspace.changed"]
 
 [[policy.tool]]

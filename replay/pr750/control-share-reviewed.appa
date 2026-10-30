@@ -1,0 +1,8 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# КОНТРОЛЬ: share_file PR не трогает, ревью как раньше.
+mcp/claude_ai_Google_Drive/share_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  role: "reader"
+  emailAddress: "outside@example.com"
+}
+expect deny

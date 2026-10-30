@@ -1,0 +1,11 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ОСТАТОК PR: inheritedPermissionsDisabled: false без parentId. Схема коннектора: «false to
+# re-enable inherited permissions». В фикстуре FOLDER_FINANCE_RESTRICTED (читает группа finance)
+# лежит в папке, открытой по ссылке: после вызова её содержимое видно по ссылке. Аннотатор
+# сравнивает вызов с текущими читателями папки (internal) и родителя не спрашивает
+# (публичный комментарий ученика к PR #750, 2026-10-29).
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FOLDER_FINANCE_RESTRICTED"
+  inheritedPermissionsDisabled: false
+}
+expect allow

@@ -30,12 +30,12 @@
 **Установлено 2026-10-29** (схема 11 инструментов коннектора claude.ai Google Drive снята, `results/connector-tools-list-2026-10-29.json`; ни один инструмент не вызывался):
 - У `create_file`, `copy_file`, `update_file` есть аргумент папки-получателя `parentId`.
 - Перенос в батарее **есть**: это `update_file` с `parentId` («If the file has an existing parent, it will be replaced, resulting in a folder move»). Ревью ему не нужно, как `create_file` и `copy_file`.
-- Контракт сверен на v0.37.0 и `main` (коммит `fe49707`, 2026-10-29): sha256 тот же, что на v0.34.0 (`results/pin-check-2026-10-29.txt`).
+- Контракт сверен на v0.37.0 и `main` (коммит `fe49707`, 2026-10-29): sha256 тот же, что на v0.34.0 (`results/pin-check-2026-10-29.txt`). Issue #747 ссылается на `main` @`af1303d` (2026-10-28): там sha256 тот же, как и на `cf2dd4a` (`main` 2026-10-30), `results/pin-check-2026-10-30.txt`. Разные коммиты в issue и в сверке — это разные даты, контракт один.
 - `appa` 0.34.0 (`appa-aarch64-apple-darwin`, сборка из релизов OpenAPPA) поставлен в `~/.local/bin/appa`; replay прогоняется через `./run.sh`.
 
 ## Что это меняет в кейсе (не проверено на живом развёртывании)
 
-1. **Зазор уже, чем в исходной формулировке.** Сначала кейс описывался как «внутренние данные уходят наружу без ревью». Но после любого чтения из Drive контекст помечен `suspicious`, а записи требуют `trusted`. Поэтому сценарий «инъекция в документе Drive → агент кладёт файл в общую папку» монитор **блокирует**. Авторы это закладывали (цитата выше).
+1. **Зазор уже, чем «внутренние данные уходят наружу без ревью».** Но после любого чтения из Drive контекст помечен `suspicious`, а записи требуют `trusted`. Поэтому сценарий «инъекция в документе Drive → агент кладёт файл в общую папку» монитор **блокирует**. Авторы это закладывали (цитата выше).
 2. **Где зазор остаётся.** (а) Данные из другого источника, помеченные `trusted` и `internal`, записываются через `create_file` или `update_file` в папку, у которой есть внешний доступ: контракт считает читателями `internal`, а по Google их больше. (б) `copy_file` переносит содержимое внутри Drive, не проходя через контекст агента. Метки прочитанного его не касаются, а копия в общей папке получает её доступ. Оговорка: id исходного файла агент обычно получает через `search_files`, а это помечает контекст `suspicious`, и запись запрещается; путь реален, только когда id даёт пользователь.
 3. **Кто источник.** Раз недоверенный ввод в той же траектории блокирует запись, внешнему атакующему через инъекцию сюда не пройти. Остаются ошибка модели, ошибка пользователя и инсайдер, который заранее открыл папку наружу. Это меняет сложность эксплуатации и риск: ниже, чем звучало вначале. README формулирует находку под этот, более узкий зазор.
 4. **Готовое решение берём.** Воспроизведение (`appa replay` + `.appa`) берём как есть. Исправленный контракт строится средствами самого формата: сужение по аргументу папки (если он есть) или `attention` на запись. Свой код только линтер.
@@ -44,4 +44,25 @@
 |---|---|---|
 | Воспроизведение одной командой | `appa replay` v0.34.0 | ADOPT |
 | Исправленный контракт | формат `appa.toml`: сужение по аргументу, `attention` | ADOPT, пишет автор |
-| Проверка любых контрактов на «запись без ревью» | своего готового не найдено | BUILD: линтер `checker/`, перевести на настоящий `appa.toml` |
+| Проверка любых контрактов на «запись без меры» | своего готового не найдено | BUILD: линтер `checker/`, читает настоящий `appa.toml` (поставляемый Drive, PR #750, slack) |
+
+## Установлено 2026-10-30
+
+**Флаг наследования.** Схема коннектора (`results/connector-tools-list-2026-10-29.json`), `update_file.inheritedPermissionsDisabled`:
+> "Set to true to disable inherited permissions (restricting access to only users with direct permissions on the folder), or false to re-enable inherited permissions. Only supported for folders."
+
+Круг читателей расширяет `false`. До 2026-10-30 README и WRITEUP называли опасным `true`; это было неверно.
+
+**Аудитория из аргумента** (`website/content/docs/contracts.md`, тег v0.37.0, раздел «Read a source collection from a tool argument»):
+> "At check time OpenAPPA replaces each `$<argument_name>` with the call's argument value."
+
+Прецедент в поставляемой батарее: `marketplace/batteries/slack/appa.toml`, тег v0.37.0 (коммит `b9e2cee`), L153 — `audience = { contains = ["@slack:channel/$channel_id"] }`. Снимок: `results/slack-appa-v0.37.0.toml`.
+
+**`forwards`** (тот же contracts.md): "Restrictions carried by content the tool sends beyond its arguments", и для статического поля — "literal entries only: no `$<argument_name>` placeholders". Аннотатор может вернуть `forwards` на каждый вызов («It can determine … the restrictions of content it sends (`forwards`)»).
+
+**PR #750** ([archestra-ai/OpenAPPA#750](https://github.com/archestra-ai/OpenAPPA/pull/750), «Closes #747», автор vadim0x60, открыт 2026-10-29, голова `2a9397b`, не слит на 2026-10-30). Из описания PR:
+> "The three write tools now go through a new annotator, `google-workspace.drive-readers`"
+
+Снимок файлов PR — `results/upstream-pr750-2a9397b/` (sha256 там же). Сам issue предлагал это как вариант (c): "an annotator or context provider could fetch the same data over a trusted path".
+
+**`appa` 0.34.0.** Релиз GitHub v0.34.0, `SHA256SUMS`: `appa-aarch64-apple-darwin.tar.gz` — `1e2c916f…5af686`. Бинарь из архива — sha256 `536a3445…1a93`, совпадает с `~/.local/bin/appa` стенда.

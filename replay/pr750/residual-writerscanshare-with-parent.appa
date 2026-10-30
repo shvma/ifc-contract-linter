@@ -1,0 +1,8 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ОСТАТОК PR: то же с переносом во внутреннюю папку (critic-combo).
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  writersCanShare: true
+}
+expect allow
