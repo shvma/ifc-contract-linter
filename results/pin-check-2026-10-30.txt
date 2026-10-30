@@ -1,0 +1,11 @@
+date: 2026-10-30T08:14:58Z
+repo: archestra-ai/OpenAPPA, file: marketplace/batteries/google-workspace/appa.toml
+v0.34.0  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117
+v0.37.0  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117
+af1303dd82069fbc776289e733f7c7cbded0c335  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117
+fe497073c1eb0ad8add924d20d5ea8782f21a3dc  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117
+cf2dd4af2b4f964e75456192d169b91b8f0ac66b  appa.toml dc3d120de8f06ee17f594db0cca078c7c87699fd36c434188e9c52c6f0e8c117
+2a9397baf5305145bb10eb67fa92f2a3135b450b  appa.toml 826227e121d16d850d19011fb5277e57b96a11b3b106a4c507b90a17ef11e0e0
+af1303d = main в issue #747 (2026-10-28); fe49707 = main при сверке 2026-10-29; cf2dd4af2b4f964e75456192d169b91b8f0ac66b = main на дату файла; 2a9397b = голова PR #750 (не слит)
+PR #750: OPEN head=2a9397baf5305145bb10eb67fa92f2a3135b450b merged=null
+slack appa.toml v0.37.0: 9d42ab63f054111c9489efe051c0613793dc4a8c4d74825160626e7e5ec128c8

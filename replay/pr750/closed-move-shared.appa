@@ -1,0 +1,7 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ЗАКРЫТО: перенос в папку, открытую по ссылке (gap/leak-move). Требуется public.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  parentId: "FOLDER_SHARED_ANYONE_WITH_LINK"
+}
+expect deny

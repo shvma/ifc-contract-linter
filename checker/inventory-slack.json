@@ -1,0 +1,41 @@
+{
+  "comment": "ЧЕРНОВИК АГЕНТА, классификацию решает ученик. Инвентарь для прогона линтера на чужой батарее: slack, OpenAPPA v0.37.0 (results/slack-appa-v0.37.0.toml). Схема коннектора claude.ai Slack не снималась: классы взяты из имён инструментов, а там, где агент расходится с комментариями батареи, это сказано в причине. Поэтому инвентарь не независим от контракта полностью; прогон проверяет механику линтера (аудитория из аргумента как мера) на контракте, который писали не мы.",
+  "widens_readers": {
+    "mcp/claude_ai_Slack/slack_send_message": "сообщение читают участники канала channel_id",
+    "mcp/claude_ai_Slack/slack_schedule_message": "отложенное сообщение читают участники канала channel_id",
+    "mcp/claude_ai_Slack/slack_create_canvas": "канвас читают те, с кем он расшарен; кто это, контракт не знает (гипотеза агента, схема не снята)",
+    "mcp/claude_ai_Slack/slack_update_canvas": "правку видят все, кто уже читает канвас, в том числе через канал Slack Connect (гипотеза агента, не проверена)",
+    "mcp/claude_ai_Slack/slack_create_conversation": "название и тему нового канала видят его участники, у публичного — все в рабочем пространстве (гипотеза агента)",
+    "mcp/claude_ai_Slack/slack_add_reaction": "реакцию видят участники канала; батарея относит её к «writes nobody else reads yet» — здесь агент с батареей расходится (гипотеза, канал на несколько бит)"
+  },
+  "target_args": {
+    "mcp/claude_ai_Slack/slack_send_message": [
+      "channel_id"
+    ],
+    "mcp/claude_ai_Slack/slack_schedule_message": [
+      "channel_id"
+    ]
+  },
+  "sends_content": [],
+  "exempt": {
+    "mcp/claude_ai_Slack/slack_send_message_draft": "черновик видит только автор (комментарий батареи: «writes nobody else reads yet»)"
+  },
+  "read_only": {
+    "mcp/claude_ai_Slack/slack_read_channel": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_read_thread": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_list_channel_members": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_get_reactions": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_read_canvas": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_read_file": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_read_user_profile": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_search_public": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_search_public_and_private": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_search_channels": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_search_users": "чтение: результат помечается delta или аннотатором, requires нет",
+    "mcp/claude_ai_Slack/slack_search_emojis": "чтение: результат помечается delta или аннотатором, requires нет"
+  },
+  "review_gates": [
+    "human-approval"
+  ],
+  "source": "results/slack-appa-v0.37.0.toml (тег v0.37.0), имена инструментов; 2026-10-30"
+}

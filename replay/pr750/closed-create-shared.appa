@@ -1,0 +1,14 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# ЗАКРЫТО: тот же create_file, что gap/leak-create (пример issue #747). Папка открыта по ссылке,
+# аннотатор требует public, данные из Linear — internal. Отказ без ревью, по аудитории.
+mcp/linear/get_diff {
+  id: "LIN-123"
+}
+expect allow
+
+mcp/claude_ai_Google_Drive/create_file {
+  title: "diff-summary"
+  textContent: "internal diff"
+  parentId: "FOLDER_SHARED_ANYONE_WITH_LINK"
+}
+expect deny

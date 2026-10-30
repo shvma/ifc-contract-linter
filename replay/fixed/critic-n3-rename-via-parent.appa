@@ -1,0 +1,10 @@
+# ПРОБА КРИТИКА (ревью 2026-10-30, n3): «цена» cost-rename-review обходилась — добавь
+# parentId из белого списка, и переименование шло без ревью. Сама по себе это не утечка,
+# а дыра в заявленной цене. До 2026-10-30 — allow; теперь ревью, цена честная.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+  title: "diff-summary-v2"
+  readOnly: false
+}
+expect deny

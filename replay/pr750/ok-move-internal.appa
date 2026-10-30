@@ -1,0 +1,7 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# БЕЗ ЦЕНЫ: перенос во внутреннюю папку без ревью. В варианте «б» это ревью.
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FILE_INTERNAL_DIFF"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+}
+expect allow

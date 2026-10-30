@@ -1,0 +1,9 @@
+# Против PR archestra-ai/OpenAPPA#750 (2a9397b), аннотатор drive-readers на фикстуре ../drive-readers-fixture.py.
+# НЕ ЗАЗОР ДЛЯ PR: папка, открытая по ссылке, едет во внутреннюю. Её содержимое уже public
+# (forwards public), читатели внутренней папки ничего нового не открывают. Вариант «б» отказывал,
+# потому что верит белому списку, а не Drive (вывод агента, не проверен вживую).
+mcp/claude_ai_Google_Drive/update_file {
+  fileId: "FOLDER_SHARED_ANYONE_WITH_LINK"
+  parentId: "FOLDER_INTERNAL_REPORTS"
+}
+expect allow

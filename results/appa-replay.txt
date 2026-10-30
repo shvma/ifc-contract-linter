@@ -14,23 +14,40 @@ ok    replay/gap/leak-move.appa
 ok    replay/gap/writers-can-share.appa:4 mcp/claude_ai_Google_Drive/update_file allow
 ok    replay/gap/writers-can-share.appa
 6 files: 6 ok, 0 failed, 0 could not run
-# fixed (черновик исправления, вариант «б»):
+# fixed (черновик исправления, вариант «б»; пробы критика — critic-*):
 ok    replay/fixed/control-read-then-write.appa:2 mcp/claude_ai_Google_Drive/read_file_content allow (after accepting the narrowing)
 ok    replay/fixed/control-read-then-write.appa:7 mcp/claude_ai_Google_Drive/create_file deny
 ok    replay/fixed/control-read-then-write.appa
 ok    replay/fixed/copy-no-parent-review.appa:3 mcp/claude_ai_Google_Drive/copy_file deny
 ok    replay/fixed/copy-no-parent-review.appa
+ok    replay/fixed/cost-internal-copy-review.appa:4 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/fixed/cost-internal-copy-review.appa
+ok    replay/fixed/cost-internal-move-review.appa:6 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/cost-internal-move-review.appa
 ok    replay/fixed/cost-rename-review.appa:3 mcp/claude_ai_Google_Drive/update_file deny
 ok    replay/fixed/cost-rename-review.appa
-ok    replay/fixed/internal-copy-ok.appa:2 mcp/claude_ai_Google_Drive/copy_file allow
-ok    replay/fixed/internal-copy-ok.appa
+ok    replay/fixed/critic-combo.appa:3 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/critic-combo.appa
+ok    replay/fixed/critic-n1-download-restriction.appa:4 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/critic-n1-download-restriction.appa
+ok    replay/fixed/critic-n2-reinherit-restricted-folder.appa:5 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/critic-n2-reinherit-restricted-folder.appa
+ok    replay/fixed/critic-n3-rename-via-parent.appa:4 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/critic-n3-rename-via-parent.appa
+ok    replay/fixed/critic-n4-create-folder-noinherit.appa:6 mcp/claude_ai_Google_Drive/create_file allow
+ok    replay/fixed/critic-n4-create-folder-noinherit.appa
+ok    replay/fixed/critic-n5-pull-shared-folder-in.appa:4 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/critic-n5-pull-shared-folder-in.appa
+ok    replay/fixed/critic-n6-copy-restricted-then-trash.appa:7 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/fixed/critic-n6-copy-restricted-then-trash.appa:14 mcp/claude_ai_Google_Drive/trash_file allow
+ok    replay/fixed/critic-n6-copy-restricted-then-trash.appa
+ok    replay/fixed/critic-n7-case-variant.appa:3 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/fixed/critic-n7-case-variant.appa
+ok    replay/fixed/critic-restricted-copy.appa:4 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/fixed/critic-restricted-copy.appa
 ok    replay/fixed/internal-create-ok.appa:2 mcp/linear/get_diff allow (after accepting the narrowing)
 ok    replay/fixed/internal-create-ok.appa:7 mcp/claude_ai_Google_Drive/create_file allow
 ok    replay/fixed/internal-create-ok.appa
-ok    replay/fixed/internal-move-ok.appa:4 mcp/claude_ai_Google_Drive/update_file allow
-ok    replay/fixed/internal-move-ok.appa
-ok    replay/fixed/residual-writerscanshare-via-allowlist.appa:7 mcp/claude_ai_Google_Drive/update_file allow
-ok    replay/fixed/residual-writerscanshare-via-allowlist.appa
 ok    replay/fixed/shared-copy-blocked.appa:4 mcp/claude_ai_Google_Drive/copy_file deny
 ok    replay/fixed/shared-copy-blocked.appa
 ok    replay/fixed/shared-create-blocked.appa:2 mcp/linear/get_diff allow (after accepting the narrowing)
@@ -40,7 +57,57 @@ ok    replay/fixed/shared-move-blocked.appa:4 mcp/claude_ai_Google_Drive/update_
 ok    replay/fixed/shared-move-blocked.appa
 ok    replay/fixed/writers-can-share-review.appa:3 mcp/claude_ai_Google_Drive/update_file deny
 ok    replay/fixed/writers-can-share-review.appa
-11 files: 11 ok, 0 failed, 0 could not run
+ok    replay/fixed/writerscanshare-with-parent-review.appa:6 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/fixed/writerscanshare-with-parent-review.appa
+20 files: 20 ok, 0 failed, 0 could not run
+# pr750 (PR archestra-ai/OpenAPPA#750 @2a9397b, аннотатор на фикстуре):
+ok    replay/pr750/closed-copy-shared.appa:3 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/pr750/closed-copy-shared.appa
+ok    replay/pr750/closed-create-shared.appa:4 mcp/linear/get_diff allow (after accepting the narrowing)
+ok    replay/pr750/closed-create-shared.appa:9 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/pr750/closed-create-shared.appa
+ok    replay/pr750/closed-move-shared.appa:3 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/pr750/closed-move-shared.appa
+ok    replay/pr750/control-read-then-write.appa:3 mcp/claude_ai_Google_Drive/read_file_content allow (after accepting the narrowing)
+ok    replay/pr750/control-read-then-write.appa:8 mcp/claude_ai_Google_Drive/create_file deny
+ok    replay/pr750/control-read-then-write.appa
+ok    replay/pr750/control-share-reviewed.appa:3 mcp/claude_ai_Google_Drive/share_file deny
+ok    replay/pr750/control-share-reviewed.appa
+ok    replay/pr750/critic-n1-download-restriction.appa:4 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/pr750/critic-n1-download-restriction.appa
+ok    replay/pr750/critic-n2-reinherit-restricted-folder.appa:4 mcp/claude_ai_Google_Drive/update_file deny
+ok    replay/pr750/critic-n2-reinherit-restricted-folder.appa
+ok    replay/pr750/critic-n3-rename-via-parent.appa:3 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/critic-n3-rename-via-parent.appa
+ok    replay/pr750/critic-n4-create-folder-noinherit.appa:3 mcp/claude_ai_Google_Drive/create_file allow
+ok    replay/pr750/critic-n4-create-folder-noinherit.appa
+ok    replay/pr750/critic-n5-pull-shared-folder-in.appa:5 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/critic-n5-pull-shared-folder-in.appa
+ok    replay/pr750/critic-n6-copy-restricted-then-trash.appa:3 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/pr750/critic-n6-copy-restricted-then-trash.appa:10 mcp/claude_ai_Google_Drive/trash_file allow
+ok    replay/pr750/critic-n6-copy-restricted-then-trash.appa
+ok    replay/pr750/critic-restricted-copy.appa:4 mcp/claude_ai_Google_Drive/copy_file deny
+ok    replay/pr750/critic-restricted-copy.appa
+ok    replay/pr750/ok-copy-internal.appa:3 mcp/claude_ai_Google_Drive/copy_file allow
+ok    replay/pr750/ok-copy-internal.appa
+ok    replay/pr750/ok-copy-no-parent.appa:4 mcp/claude_ai_Google_Drive/copy_file allow
+ok    replay/pr750/ok-copy-no-parent.appa
+ok    replay/pr750/ok-create-internal.appa:3 mcp/linear/get_diff allow (after accepting the narrowing)
+ok    replay/pr750/ok-create-internal.appa:8 mcp/claude_ai_Google_Drive/create_file allow
+ok    replay/pr750/ok-create-internal.appa
+ok    replay/pr750/ok-move-internal.appa:3 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/ok-move-internal.appa
+ok    replay/pr750/ok-rename.appa:3 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/ok-rename.appa
+ok    replay/pr750/residual-download-restriction.appa:5 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/residual-download-restriction.appa
+ok    replay/pr750/residual-reinherit-no-parent.appa:7 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/residual-reinherit-no-parent.appa
+ok    replay/pr750/residual-writerscanshare-with-parent.appa:3 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/residual-writerscanshare-with-parent.appa
+ok    replay/pr750/residual-writerscanshare.appa:5 mcp/claude_ai_Google_Drive/update_file allow
+ok    replay/pr750/residual-writerscanshare.appa
+21 files: 21 ok, 0 failed, 0 could not run
 # проба: bool-selector
 ok    replay/probes/bool-selector/bool-not-matched.appa:4 mcp/claude_ai_Google_Drive/update_file allow
 ok    replay/probes/bool-selector/bool-not-matched.appa
@@ -52,3 +119,7 @@ ok    replay/probes/no-audience-source/read-then-write.appa:2 mcp/claude_ai_Goog
 ok    replay/probes/no-audience-source/read-then-write.appa:7 mcp/claude_ai_Google_Drive/create_file deny
 ok    replay/probes/no-audience-source/read-then-write.appa
 1 file: 1 ok, 0 failed, 0 could not run
+# проба: pr750-unknown-id (ждём could not run)
+replay/probes/pr750-unknown-id/case-variant.appa:5: mcp/claude_ai_Google_Drive/create_file: cannot run: annotator=google-workspace.drive-readers error=non_success status=1
+FAIL  replay/probes/pr750-unknown-id/case-variant.appa
+1 file: 0 ok, 0 failed, 1 could not run
